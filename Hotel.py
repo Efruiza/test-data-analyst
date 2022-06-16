@@ -65,7 +65,7 @@ for column in missing_data.columns.values.tolist():
 #No faltan datos, no hay nada que hacer entonces.
     
 #%%
-# ¿De dónde vienen los huéspoedes?
+# ¿De dónde vienen los huéspedes?
 
 countries = pd.DataFrame(hotel['country'].value_counts())
 countries.rename(columns = {'country':'N_of_clients'}, inplace=True)
@@ -77,7 +77,7 @@ coun.loc[8] = [p , "OTHERS"]
 
 
 print("Particularmente, en la siguiente gráfica se puede apreciar, por países, aquellos que representan una mayor cantidad de huéspedes \n")
-print("Los cuales son: Portugal, Inglaterra, Francia, España y Alemania")
+print("los cuales son: Portugal, Inglaterra, Francia, España y Alemania")
     
 fig = plt.figure(figsize =(7, 7))
 plt.pie(coun['N_of_clients'], labels=coun['c'], colors = sns.color_palette('coolwarm'), autopct='%.0f%%')
@@ -172,7 +172,7 @@ f2 = sns.relplot(
 plt.savefig('f2.png', orientation="landscape")
 
 
-print("\n Se ve una tendencia de pico entre las semanas 30 y 40, lo cual es de esperarse por ser las vacaciones de verano" )
+print("\n Se ve una tendencia de pico entre las semanas 30 y 40, lo cual es de esperarse por ser las vacaciones de verano en el hotel Resort, pero no se ve el mismo comportamiento en el hotel City" )
 #%%
   # Meses más ocupados
   
@@ -204,12 +204,12 @@ print("""Los meses más ocupados son Octubre-2016, Mayo-2016 y Mayo-2017, el pri
     #Primero, sumaremos el numero de noches en total, en una nueva columna
 
 hotel_yes = hotel[hotel['is_canceled'] == '0']
-hotel_yes["total_n"] = hotel_yes[["stays_in_week_nights", "stays_in_weekend_nights"]].sum(axis=1, skipna=True)
+hotel_yes['total_n'] = hotel_yes[["stays_in_week_nights", "stays_in_weekend_nights"]].sum(axis=1, skipna=True)
 
 
 #Calculamos el máximo y el mínimo
-M = hotel_yes["total_n"].max()
-m = hotel_yes["total_n"].min()
+M = hotel_yes['total_n'].max()
+m = hotel_yes['total_n'].min()
 
 print("Los huespédes se alojan desde " + str(m) + " noches hasta " + str(M) + " noches")    
     
@@ -257,7 +257,19 @@ plt.ylabel("Number of cancelations")
 plt.xticks(rotation=45)
 plt.savefig('hist_plot.png')    
     
-    
+#%%
+
+#Aquí nos fijamos en cuántas veces nos han cancelado, nuevos clientes o clientes repetidos
+
+
+print(hotel_cancel['previous_bookings_not_canceled'].value_counts())
+print("En estas tablas vemos que los no estamos logrando captar bien a los clientes nuevos")
+
+fig = plt.figure(figsize =(7,10))
+g = sns.FacetGrid(hotel_cancel, col="is_repeated_guest", height=4, aspect=1)
+g.map(sns.histplot, "previous_bookings_not_canceled", color="turquoise")
+
+  
     
     
     
